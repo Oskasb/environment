@@ -6,7 +6,7 @@ define([
 ],function(
 	Sky
 	) {
-	var waterColorTexturePath = '../../../../../tunnan_resources/water';
+	var waterColorTexturePath = window.resourcePath+'water';
 
 	var EnvironmentAPI = function() {
 
