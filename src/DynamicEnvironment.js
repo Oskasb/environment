@@ -102,7 +102,7 @@ define([
 		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
 
-	DynamicEnvironment.prototype.playVaporEffect = function(effectName, pos, vel, effectData) {
+	DynamicEnvironment.prototype.playVaporEffect = function(pos, vel, effectData) {
 
 		effectData.color = [
 			Math.sqrt(envState.skyColor.data[0]*0.5+envState.sunLight.data[0]*0.5 + Math.random()*0.1),
@@ -110,7 +110,7 @@ define([
 			Math.sqrt(envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.5 + Math.random()*0.1),
 			0.5 + Math.random()*0.5];
 
-//		SystemBus.emit('playParticles', {effectName:effectName, pos:pos, vel:vel, effectData:effectData});
+		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
 
 	DynamicEnvironment.prototype.addEnvEffects = function() {
@@ -124,7 +124,7 @@ define([
 		}.bind(this);
 
 		var updateVaporFx = function(args) {
-			this.playVaporEffect(args.effectName, args.pos, args.vel, args.effectData);
+			this.playVaporEffect(args.pos, args.vel, args.effectData);
 		}.bind(this);
 
 		SystemBus.addListener('playWaterEffect', updateWaterFx);
