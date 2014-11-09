@@ -78,7 +78,7 @@ define([
 
 
 
-	DynamicEnvironment.prototype.playWaterEffect = function(effectName, pos, vel, effectData) {
+	DynamicEnvironment.prototype.playWaterEffect = function(pos, vel, effectData) {
 		var brt = Math.random()*0.16;
 		effectData.color = [
 			envState.skyColor.data[0]*0.5+envState.sunLight.data[0]*0.5 + Math.random()*0.04+brt,
@@ -86,7 +86,9 @@ define([
 			envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.5 + Math.random()*0.04+brt,
 			Math.random()];
 
-//		SystemBus.emit('playParticles', {effectName:effectName, pos:pos, vel:vel, effectData:effectData});
+
+
+		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
 
 	DynamicEnvironment.prototype.playCloudEffect = function(effectName, pos, vel, effectData) {
@@ -114,7 +116,7 @@ define([
 	DynamicEnvironment.prototype.addEnvEffects = function() {
 
 		var updateWaterFx = function(args) {
-			this.playWaterEffect(args.effectName, args.pos, args.vel, args.effectData);
+			this.playWaterEffect(args.pos, args.vel, args.effectData);
 		}.bind(this);
 
 		var updateCloudFx = function(args) {
