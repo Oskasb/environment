@@ -84,7 +84,7 @@ define([
 			envState.skyColor.data[0]*0.5+envState.sunLight.data[0]*0.5 + Math.random()*0.04+brt,
 			envState.skyColor.data[1]*0.5+envState.sunLight.data[1]*0.5 + Math.random()*0.04+brt,
 			envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.5 + Math.random()*0.04+brt,
-			Math.random()];
+			1];
 
 
 
