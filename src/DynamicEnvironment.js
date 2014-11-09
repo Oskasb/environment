@@ -91,7 +91,7 @@ define([
 		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
 
-	DynamicEnvironment.prototype.playCloudEffect = function(effectName, pos, vel, effectData) {
+	DynamicEnvironment.prototype.playCloudEffect = function(pos, vel, effectData) {
 
 		effectData.color = [
 			envState.skyColor.data[0]*0.5+envState.sunLight.data[0]*0.4 + Math.random()*0.1,
@@ -99,7 +99,7 @@ define([
 			envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.4 + Math.random()*0.1,
 			0.04 + Math.random()*0.1];
 
-//		SystemBus.emit('playParticles', {effectName:effectName, pos:pos, vel:vel, effectData:effectData});
+		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
 
 	DynamicEnvironment.prototype.playVaporEffect = function(effectName, pos, vel, effectData) {
@@ -120,7 +120,7 @@ define([
 		}.bind(this);
 
 		var updateCloudFx = function(args) {
-			this.playCloudEffect(args.effectName, args.pos, args.vel, args.effectData);
+			this.playCloudEffect(args.pos, args.vel, args.effectData);
 		}.bind(this);
 
 		var updateVaporFx = function(args) {

@@ -19,7 +19,7 @@ define([
 			this.environment = new DynamicEnvironment();
 			this.skySphere = new DynamicSkysphere(goo);
 			this.skySphere.makeSun();
-			Clouds.createClouds([0, 1000, 0],[10000, 3000, 10000], 8);
+			Clouds.createClouds([0, 1500, 0],[10000, 800, 10000], 8);
 		};
 
 		Sky.prototype.attachWaterSystem = function(goo, resourcePath) {

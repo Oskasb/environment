@@ -51,8 +51,27 @@ define([
 
 			hitVec.set(clouds[idx][0]+Math.random()*clouds[idx][3], clouds[idx][1]+Math.random()*clouds[idx][4], clouds[idx][2]+Math.random()*clouds[idx][5]);
 			hitNorm.set(38*(Math.random()-0.5), 65*(Math.random()-0.1), 38*(Math.random()-0.5));
-			var effectData = {};
-			SystemBus.emit('playCloudEffect', {effectName:'white_cloud_puff', pos:hitVec, vel:hitNorm, effectData:effectData});
+
+			var effectData = {
+				"size": [ 1220, 2880 ],
+				"gravity": 0,
+				"count": 1,
+				"lifespan": [3.1, 6.8],
+				"opacity":[0.2, 0.7],
+				"alpha":"zeroOneZero",
+				"growthFactor":[0, 5],
+				"growth":"oneToZero",
+				"stretch":0,
+				"strength":100,
+				"spread":1,
+				"acceleration":0,
+				"rotation":[0,7],
+				"spin":"oneToZero",
+				"spinspeed":[0,0],
+				"sprite":"smokey"
+			};
+
+			SystemBus.emit('playCloudEffect', {pos:hitVec, vel:hitNorm, effectData:effectData});
 
 		};
 
