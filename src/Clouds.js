@@ -56,7 +56,7 @@ define([
 				"size": [ 1220, 2880 ],
 				"gravity": 0,
 				"count": 1,
-				"lifespan": [3.1, 6.8],
+				"lifespan": [3.1, 4.8],
 				"opacity":[0.2, 0.7],
 				"alpha":"zeroOneZero",
 				"growthFactor":[0, 5],
@@ -76,14 +76,15 @@ define([
 		};
 
         var renderTick = function() {
-        //    if (Math.random() < 0.8) return;
+
             lastPuffIndex += 1;
             if (lastPuffIndex >= clouds.length) {
+
                 lastPuffIndex = -1;
                 return;
             }
 			var idx = Math.floor(Math.random()*clouds.length);
-
+			if (Math.random() < 0.05) return;
             makeCloudPuff(idx);
         };
 

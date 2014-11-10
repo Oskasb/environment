@@ -94,9 +94,9 @@ define([
 	DynamicEnvironment.prototype.playCloudEffect = function(pos, vel, effectData) {
 
 		effectData.color = [
-			envState.skyColor.data[0]*0.5+envState.sunLight.data[0]*0.4 + Math.random()*0.1,
-			envState.skyColor.data[1]*0.5+envState.sunLight.data[1]*0.4 + Math.random()*0.1,
-			envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.4 + Math.random()*0.1,
+			envState.skyColor.data[0]*0.5+envState.sunLight.data[0]*0.6 + Math.random()*0.1,
+			envState.skyColor.data[1]*0.5+envState.sunLight.data[1]*0.6 + Math.random()*0.1,
+			envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.6 + Math.random()*0.1,
 			0.04 + Math.random()*0.1];
 
 		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
