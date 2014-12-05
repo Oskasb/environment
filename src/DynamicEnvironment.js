@@ -80,36 +80,42 @@ define([
 
 	DynamicEnvironment.prototype.playWaterEffect = function(pos, vel, effectData) {
 		var brt = Math.random()*0.16;
-		effectData.color = [
+		effectData.color0 = [
 			envState.skyColor.data[0]*0.5+envState.sunLight.data[0]*0.5 + Math.random()*0.04+brt,
 			envState.skyColor.data[1]*0.5+envState.sunLight.data[1]*0.5 + Math.random()*0.04+brt,
-			envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.5 + Math.random()*0.04+brt,
-			1];
+			envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.5 + Math.random()*0.04+brt
+		];
 
-
+		effectData.color1 = effectData.color0;
+		effectData.opacity = [0.8, 0.4];
 
 		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
 
 	DynamicEnvironment.prototype.playCloudEffect = function(pos, vel, effectData) {
 
-		effectData.color = [
+		effectData.color0 = [
 			envState.skyColor.data[0]*0.5+envState.sunLight.data[0]*0.6 + Math.random()*0.1,
 			envState.skyColor.data[1]*0.5+envState.sunLight.data[1]*0.6 + Math.random()*0.1,
-			envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.6 + Math.random()*0.1,
-			0.04 + Math.random()*0.1];
+			envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.6 + Math.random()*0.1
+		];
+
+		effectData.color1 = effectData.color0;
+		effectData.opacity = [0.1, 0.2];
 
 		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
 
 	DynamicEnvironment.prototype.playVaporEffect = function(pos, vel, effectData) {
 
-		effectData.color = [
+		effectData.color0 = [
 			Math.sqrt(envState.skyColor.data[0]*0.5+envState.sunLight.data[0]*0.5 + Math.random()*0.1),
 			Math.sqrt(envState.skyColor.data[1]*0.5+envState.sunLight.data[1]*0.5 + Math.random()*0.1),
-			Math.sqrt(envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.5 + Math.random()*0.1),
-			0.5 + Math.random()*0.5];
+			Math.sqrt(envState.skyColor.data[2]*0.5+envState.sunLight.data[2]*0.5 + Math.random()*0.1)
+		];
 
+		effectData.color1 = effectData.color0;
+		effectData.opacity = [0.1, 0.4];
 		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
 
