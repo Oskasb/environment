@@ -20,18 +20,11 @@ define([
 		) {
 
 
-
-		var waterColorTexturePath = 'water/watertile.png';
-
-		function makeWaterMaterial() {
-            var material = new Material('water_material', ShaderLib.simple);
-			return material;
-		}
-
 		var Water = function(goo, skySphere, resourcePath) {
 			this.folderUrl = resourcePath;
 			var meshData = Surface.createTessellatedFlat(291500, 291500, 40, 40);
-			var material = makeWaterMaterial(this.folderUrl+waterColorTexturePath);
+
+			var material = new Material('water_material', ShaderLib.simple);
 			this.waterEntity = goo.world.createEntity(meshData, material);
 
 			this.waterEntity.transformComponent.transform.setRotationXYZ(-Math.PI / 2, 0, 0);
@@ -42,8 +35,6 @@ define([
             this.waterRenderer.waterMaterial.shader.uniforms.doFog = true;
 			this.baseFogNear = 50;
 			this.baseFogFar = 20000;
-
-
 
 		};
 

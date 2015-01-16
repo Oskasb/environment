@@ -17,159 +17,90 @@ define([
 	ShaderBuilder
 	) {
 
-	var goo;
-	var tempVec = new Vector3();
-	var shadowReso = 128;
-	var shadowNear = 3.2;
-	var shadowSize = 25;
-	var shadowFar = 27;
-	var shadowType = "basic";
 
-	var baseFogNear = 50;
-	var baseFogFar = 20000;
+	var Lighting = function(goo) {
 
-	var sunBoost = 1.5;
-	var ambientBoost = 0.7;
+		this.goo = goo;
+		this.tempVec = new Vector3();
+		this.shadowReso = 128;
+		this.shadowNear = 3.2;
+		this.shadowSize = 25;
+		this.shadowFar = 27;
+		this.shadowType = "basic";
+		this.baseFogNear = 50;
+		this.baseFogFar = 20000;
+		this.sunBoost = 1.5;
+		this.ambientBoost = 0.7;
+		this.lightEntity;
+		this.dirLight;
+		this.lightComp;
 
-	var lightEntity;
-	var dirLight;
-	var lightComp;
+	};
 
 	ShaderBuilder.USE_FOG = true;
-	function setGoo(g00) {
-		goo = g00;
-	}
 
-	function setBaseFogNearFar(fogNear, fogFar) {
-		baseFogNear = fogNear;
-		baseFogFar = fogFar;
-	}
+	Lighting.prototype.setBaseFogNearFar = function(fogNear, fogFar) {
+		this.baseFogNear = fogNear;
+		this.baseFogFar = fogFar;
+	};
 
-	function setSunlightColor(color) {
-		dirLight.color.setd(color[0]*(1+Math.random()*0.003)*sunBoost, color[1]*(1+Math.random()*0.002)*sunBoost, color[2]*(1+Math.random()*0.005)*sunBoost, 1.0);
-	}
+	Lighting.prototype.setSunlightColor = function(color) {
+		this.dirLight.color.setd(color[0]*(1+Math.random()*0.003)*this.sunBoost, color[1]*(1+Math.random()*0.002)*this.sunBoost, color[2]*(1+Math.random()*0.005)*this.sunBoost, 1.0);
+	};
 
-	function setAmbientColor(color) {
-		ShaderBuilder.GLOBAL_AMBIENT = [color[0]*(1+Math.random()*0.003)*ambientBoost, color[1]*(1+Math.random()*0.002)*ambientBoost, color[2]*(1+Math.random()*0.005)*ambientBoost, 1.0];
-	}
+	Lighting.prototype.setAmbientColor = function(color) {
+		ShaderBuilder.GLOBAL_AMBIENT = [color[0]*(1+Math.random()*0.003)*this.ambientBoost, color[1]*(1+Math.random()*0.002)*this.ambientBoost, color[2]*(1+Math.random()*0.005)*this.ambientBoost, 1.0];
+	};
 
-	function setFogColor(color) {
+	Lighting.prototype.setFogColor = function(color) {
 		ShaderBuilder.FOG_COLOR = color;
-	}
+	};
 
-	function scaleFogNearFar(near, far) {
-		setFogNearFar(baseFogNear*near, baseFogFar*far);
-	}
+	Lighting.prototype.scaleFogNearFar = function(near, far) {
+		this.setFogNearFar(this.baseFogNear*near, this.baseFogFar*far);
+	};
 
-	function setFogNearFar(near, far) {
+	Lighting.prototype.setFogNearFar = function(near, far) {
 		ShaderBuilder.FOG_SETTINGS = [near, far];
 		ShaderBuilder.USE_FOG = true;
-	}
+	};
 
-	function setSunlightDirection(dir) {
-		tempVec.set(-dir[2], -dir[1], -dir[0]);
+	Lighting.prototype.setSunlightDirection = function(dir) {
+		this.tempVec.set(-dir[2], -dir[1], -dir[0]);
 		//    lightEntity.transformComponent.transform.translation.set(dir);
-		lightEntity.transformComponent.transform.rotation.lookAt(tempVec, Vector3.UNIT_Y);
-		lightEntity.transformComponent.setUpdated();
-	}
+		this.lightEntity.transformComponent.transform.rotation.lookAt(this.tempVec, Vector3.UNIT_Y);
+		this.lightEntity.transformComponent.setUpdated();
+	};
 
-	var setupMainLight = function() {
+	Lighting.prototype.setupMainLight = function() {
 		console.log("Setup Main Light");
 
-		lightEntity = goo.world.createEntity('Light1');
-		dirLight = new DirectionalLight();
-		dirLight.color.setd(1, 0.95, 0.85, 1.0);
-		dirLight.specularIntensity = 1;
-		dirLight.intensity = 1;
+		this.lightEntity = this.goo.world.createEntity('Light1');
+		this.dirLight = new DirectionalLight();
+		this.dirLight.color.setd(1, 0.95, 0.85, 1.0);
+		this.dirLight.specularIntensity = 1;
+		this.dirLight.intensity = 1;
 
-		lightComp = new LightComponent(dirLight);
-		lightComp.light.shadowCaster = false;
-		lightComp.light.shadowSettings.darkness = 0.9;
-		lightComp.light.shadowSettings.near = shadowNear;
-		lightComp.light.shadowSettings.far = shadowFar;
-		lightComp.light.shadowSettings.size = shadowSize;
-		lightComp.light.shadowSettings.shadowType = shadowType;
-		lightComp.light.shadowSettings.resolution = [shadowReso,shadowReso];
-		console.log("lightComp ---- ",lightComp);
-		lightEntity.setComponent(lightComp);
+		this.lightComp = new LightComponent(this.dirLight);
+		this.lightComp.light.shadowCaster = false;
+		this.lightComp.light.shadowSettings.darkness = 0.9;
+		this.lightComp.light.shadowSettings.near = this.shadowNear;
+		this.lightComp.light.shadowSettings.far = this.shadowFar;
+		this.lightComp.light.shadowSettings.size = this.shadowSize;
+		this.lightComp.light.shadowSettings.shadowType = this.shadowType;
+		this.lightComp.light.shadowSettings.resolution = [this.shadowReso,this.shadowReso];
+		console.log("lightComp ---- ",this.lightComp);
+		this.lightEntity.setComponent(this.lightComp);
 
-		lightEntity.transformComponent.transform.translation.setd(0, 0, 0);
-		lightEntity.transformComponent.transform.lookAt(new Vector3(-0.5,-0.4, 0.43), Vector3.UNIT_Y);
-		lightEntity.addToWorld();
+		this.lightEntity.transformComponent.transform.translation.setd(0, 0, 0);
+		this.lightEntity.transformComponent.transform.lookAt(new Vector3(-0.5,-0.4, 0.43), Vector3.UNIT_Y);
+		this.lightEntity.addToWorld();
 
-
-		return lightEntity;
+		return this.lightEntity;
 	};
 
 
 
-	function setEffectParamToValue(effect, param, value) {
-		getEffects()[effect].fx[param] = value;
-		event.fireEvent(event.list().ANALYTICS_EVENT, {category:"CONFIG_EFFECT", action:effect, labels:JSON.stringify(value), value:0});
-	}
-
-	function setSettingParamToValue(effect, param, value) {
-		getSettings()[effect].fx[param] = value;
-		event.fireEvent(event.list().ANALYTICS_EVENT, {category:"CONFIG_OPTION", action:effect, labels:JSON.stringify(value), value:0});
-	}
-
-//	function handleEffectParam(e) {
-//		setEffectParamToValue(event.eventArgs(e).effect, event.eventArgs(e).parameter, event.eventArgs(e).value);
-//	}
-
-	function getComposers() {
-		return goo.renderSystem.composers[0].passes;
-	}
-
-	function getEffects() {
-		return {
-			//    'Shadow Pass':{fx:getShadowPass(), param:"enabled"},
-			Shadows:{fx:lightComp.light, param:"shadowCaster"},
-			Sepia:{fx:getComposers()[1], param:"enabled"},
-			Bloom:{fx:getComposers()[2], param:"enabled"},
-			Grain:{fx:getComposers()[3], param:"enabled"},
-			Contrast:{fx:getComposers()[4], param:"enabled"},
-			'RGB Shift':{fx:getComposers()[5], param:"enabled"},
-			Vignette:{fx:getComposers()[6], param:"enabled"},
-			Bleach:{fx:getComposers()[7], param:"enabled"}
-		}
-	}
-
-	var settings = {
-		particles: {highDensity:1},
-		bullets  : {visible:1},
-		water    : {fancy:1},
-		nature   : {manyTrees:0}
-	};
-
-
-	function getSettings() {
-		return {
-			'Dense Particles':  {fx:settings.particles, param:"highDensity"},
-			'Visible Bullets':  {fx:settings.bullets,   param:"visible"},
-			'Fancy Water':      {fx:settings.water,     param:"fancy"},
-			'Lots of Trees':    {fx:settings.nature,    param:"manyTrees"}
-		}
-	}
-
-	function getSettingParam(setting, param) {
-		return settings[setting][param];
-	}
-
-	return {
-		setGoo:setGoo,
-		setBaseFogNearFar:setBaseFogNearFar,
-		getEffects:getEffects,
-		getSettingParam:getSettingParam,
-		getSettings:getSettings,
-		setSettingParamToValue:setSettingParamToValue,
-		setEffectParamToValue:setEffectParamToValue,
-		setSunlightColor:setSunlightColor,
-		setSunlightDirection:setSunlightDirection,
-		setAmbientColor:setAmbientColor,
-		setFogColor:setFogColor,
-		scaleFogNearFar:scaleFogNearFar,
-		setupMainLight:setupMainLight
-	}
+	return Lighting;
 
 });

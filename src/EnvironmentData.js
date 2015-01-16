@@ -3,7 +3,7 @@
 define(function() {
 
 	var cycles = [
-		{//
+		{
 			name:'predawn',
 			values:{
 				sunLight:    [0.4, 0.3, 0.2],
@@ -120,7 +120,7 @@ define(function() {
 		baseFogNear: 150,
 		baseFogFar:20000,
 		baseCycleDuration: 10000,
-		startCycleIndex: 4
+		startCycleIndex: 0
 	};
 
 	return {

@@ -26,75 +26,75 @@ define([
 	Texture
 	) {
 
-	var goo;
-	var canvas;
-	var ctx;
-	var width = 4;
-	var height = 64;
-	var darker = 'darker';
-//    var sourceOver = 'source-over';
-	var lighter = 'lighter';
 
-//    var attenuatedFill = function(color, attenuation) {
-//        return 'rgba('+Math.floor(color[0]*255)+','+Math.floor(color[1]*255)+','+Math.floor(color[2]*255)+','+attenuation+')';
-//    };
 
 	var toRgb = function(color) {
 		return 'rgb('+Math.floor(color[0]*255)+','+Math.floor(color[1]*255)+','+Math.floor(color[2]*255)+')';
 	};
 
-	var setupCanvas = function() {
-		canvas = document.createElement("canvas");
-		canvas.id = 'sky_canvas';
-		canvas.width  = width;
-		canvas.height = height;
-		canvas.dataReady = true;
-		var texture = new Texture(canvas, null, canvas.width, canvas.height);
-		ctx = canvas.getContext('2d');
-	//	document.body.appendChild(canvas);
-		return texture;
-	};
-
-
-	function createSkyEntity(goo, shader, tx) {
-		var mapping = Sphere.TextureModes.Linear;
-
-		var skysphere = new Skybox("sphere", [], mapping, 0);
-
-		var meshData = skysphere.meshData;
-		var entity = goo.world.createEntity(meshData);
-        console.log("sky entity: ", entity);
-		var material = new Material('skyMat', shader);
-
-        console.log("Material: ", material)
-		material.setTexture('DIFFUSE_MAP', tx);
-
-		entity.set(new MeshRendererComponent(material));
-		material.cullState.enabled = false;
-		material.depthState.write = false;
-		material.renderQueue = 2;
-		//	material.shader.uniforms.color = [0.4, 0, 0]
-		entity.transformComponent.transform.rotation.rotateX(Math.PI*0.5);
-		entity.transformComponent.transform.scale.mul(900);
-		entity.meshRendererComponent.cullMode = 'Never';
-		return entity;
-	}
-
 	var DynamicSkysphere = function(g00) {
 		goo = g00;
-		this.tx = setupCanvas();
-                console.log("canvas tx: ", this.tx)
-		//    this.tx = new TextureCreator().loadTexture2D('./resources/images/skytest.png',  {
-		//	    wrapS: 'EdgeClamp',
-		//	    wrapT: 'EdgeClamp'
-		//    })
+
+		var goo;
+		this.goo = goo;
+		var canvas;
+		var ctx;
+		var width = 4;
+		var height = 64;
+		this.width = width;
+		this.height = height;
+		var darker = 'darker';
+		var lighter = 'lighter';
+
+
+
+		var setupCanvas = function(ds) {
+			canvas = document.createElement("canvas");
+			canvas.id = 'sky_canvas';
+			canvas.width  = width;
+			canvas.height = height;
+			canvas.dataReady = true;
+			var texture = new Texture(canvas, null, canvas.width, canvas.height);
+			ctx = canvas.getContext('2d');
+			ds.ctx = ctx;
+			return texture;
+		};
+
+
+		this.tx = setupCanvas(this);
 
 		this.setColor([0.7, 0.8, 1],[0.4,0.3, 0.7],[0.4, 0.6, 1], 1);
+
+
+		function createSkyEntity(goo, shader, tx) {
+			var mapping = Sphere.TextureModes.Linear;
+
+			var skysphere = new Skybox("sphere", [], mapping, 0);
+
+			var meshData = skysphere.meshData;
+			var entity = goo.world.createEntity(meshData);
+			var material = new Material('skyMat', shader);
+			material.setTexture('DIFFUSE_MAP', tx);
+			entity.set(new MeshRendererComponent(material));
+			material.cullState.enabled = false;
+			material.depthState.write = false;
+			material.renderQueue = 2;
+			//	material.shader.uniforms.color = [0.4, 0, 0]
+			entity.transformComponent.transform.rotation.rotateX(Math.PI*0.5);
+			entity.transformComponent.transform.scale.mul(900);
+			entity.meshRendererComponent.cullMode = 'Never';
+			return entity;
+		}
+
 		this.skyEntity = createSkyEntity(goo, ShaderLib.textured, this.tx);
 		//     var skyEntity = createSkyEntity(goo, ShaderLib.simpleColored, tx)
 		ShaderBuilder.SKYSPHERE = this.tx;
 
 		this.skyEntity.addToWorld();
+
+
+		this.width = width;
+		this.height = height;
 	};
 
 	DynamicSkysphere.prototype.setColor = function(fog, ambient, color, elevation) {
@@ -108,7 +108,7 @@ define([
 
 	//	document.getElementById("sys_hint").innerHTML = "Elevation:"+elevation+"<br>"+"evFact:"+evFact;
 
-		var grd=ctx.createLinearGradient(0,0,0,height);
+		var grd=this.ctx.createLinearGradient(0,0,0, this.height);
 		grd.addColorStop(1, toRgb([ambient[0]*color[0], ambient[1]*color[1], ambient[2]*color[2]]));
 	//	grd.addColorStop(0.8+evFact,toRgb([color[0]*(0.5)*(1-evFact)+fog[0]*(0.5)*evFact*evFact, color[1]*0.5*(1-evFact)+fog[1]*(0.5)*evFact*evFact, color[2]*0.5*(1-evFact)+fog[2]*0.5*evFact*evFact]));
 
@@ -117,8 +117,8 @@ define([
 		grd.addColorStop(0.5,toRgb(fog));
 		grd.addColorStop(0.2,toRgb(fog));
 		grd.addColorStop(0.1-evFact, toRgb([ambient[0]*color[0], ambient[1]*color[1], ambient[2]*color[2]]));
-		ctx.fillStyle=grd;
-		ctx.fillRect(0, 0, width, height);
+		this.ctx.fillStyle=grd;
+		this.ctx.fillRect(0, 0, this.width, this.height);
 		this.tx.setNeedsUpdate();
 	};
 
@@ -132,8 +132,7 @@ define([
 		this.sunmat.depthState.write = false;
 		this.sunmat.renderQueue = 3;
 	//	this.sunmat.renderQueue = 1;
-		this.sun = goo.world.createEntity(sphere, this.sunmat);
-		console.log("Add Sun:", this.sun)
+		this.sun = this.goo.world.createEntity(sphere, this.sunmat);
 		this.sun.transformComponent.transform.translation.set(0, 10000, 0);
 		this.sun.meshRendererComponent.isReflectable = false;
 		this.sun.addToWorld();
@@ -144,10 +143,7 @@ define([
 	};
 
 	DynamicSkysphere.prototype.setSunXYZ = function(x, y, z) {
-
-
 		this.sun.transformComponent.transform.translation.set(x, y, z);
-		//	this.sun.transformComponent.transform.translation.set(0, 100, 0);
 		this.sun.transformComponent.setUpdated();
 	};
 

@@ -14,12 +14,21 @@ define([
 		) {
 
 		var Sky = function(goo) {
-			Lighting.setGoo(goo);
-			Lighting.setupMainLight();
-			this.environment = new DynamicEnvironment();
+			this.lighting = new Lighting(goo);
+			this.lighting.setupMainLight();
+			this.environment = new DynamicEnvironment(this.lighting);
 			this.skySphere = new DynamicSkysphere(goo);
 			this.skySphere.makeSun();
-			Clouds.createClouds([0, 1500, 0],[10000, 800, 10000], 8);
+			this.clouds = new Clouds();
+			this.clouds.createClouds([0, 1500, 0],[10000, 800, 10000], 8);
+		};
+
+		Sky.prototype.setEnvData = function(envData) {
+			if (envData.globals) {
+				this.environment.setGlobals(envData.globals);
+			}
+
+			this.environment.setCycleData(envData.cycles);
 		};
 
 		Sky.prototype.attachWaterSystem = function(goo, resourcePath) {
@@ -54,7 +63,7 @@ define([
 		Sky.prototype.updateCameraFrame = function(tpf, camEntity) {
 			this.updateEnvironmentTime(tpf, camEntity);
 			this.repositionSkySphere(camEntity);
-			Clouds.tickClouds();
+			this.clouds.tickClouds();
 		};
 
 		return Sky;
