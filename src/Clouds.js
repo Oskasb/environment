@@ -16,14 +16,8 @@ define([
 		this.cloudScale = 5;
 		this.lastPuffIndex = 0;
 		this.cloudBaseHeight = 400;
-	};
 
-	Clouds.prototype.makeCloudPuff = function(idx) {
-
-		this.hitVec.set(this.clouds[idx][0]+Math.random()*this.clouds[idx][3], this.clouds[idx][1]+Math.random()*this.clouds[idx][4], this.clouds[idx][2]+Math.random()*this.clouds[idx][5]);
-		this.hitNorm.set(38*(Math.random()-0.5), 65*(Math.random()-0.1), 38*(Math.random()-0.5));
-
-		var effectData = {
+		this.effectData = {
 			"size": [ 1220, 2880 ],
 			"gravity": 0,
 			"count": 1,
@@ -42,7 +36,14 @@ define([
 			"sprite":"smokey"
 		};
 
-		SystemBus.emit('playCloudEffect', {pos:this.hitVec, vel:this.hitNorm, effectData:effectData});
+	};
+
+	Clouds.prototype.makeCloudPuff = function(idx) {
+
+		this.hitVec.set(this.clouds[idx][0]+Math.random()*this.clouds[idx][3], this.clouds[idx][1]+Math.random()*this.clouds[idx][4], this.clouds[idx][2]+Math.random()*this.clouds[idx][5]);
+		this.hitNorm.set(38*(Math.random()-0.5), 65*(Math.random()-0.1), 38*(Math.random()-0.5));
+
+		SystemBus.emit('playCloudEffect', {pos:this.hitVec, vel:this.hitNorm, effectData:this.effectData});
 
 	};
 
@@ -76,7 +77,7 @@ define([
 			}
 		}
 
-		for (var i = 0; i < this.clouds.length; i++) {
+		for (i = 0; i < this.clouds.length; i++) {
 			this.makeCloudPuff(i);
 			this.lastPuffIndex = -1
 		}

@@ -54,7 +54,7 @@ define([
 			canvas.width  = width;
 			canvas.height = height;
 			canvas.dataReady = true;
-			var texture = new Texture(canvas, null, canvas.width, canvas.height);
+			var texture = new Texture(canvas, {wrapS: 'EdgeClamp',wrapT: 'EdgeClamp'},canvas.width, canvas.height);
 			ctx = canvas.getContext('2d');
 			ds.ctx = ctx;
 			return texture;
@@ -115,8 +115,6 @@ define([
 		grd.addColorStop(0.627+(evFact), toRgb([color[0]*(1-evFact), color[1]*(1-evFact), color[2]*(1-evFact)]));
      		//    grd.addColorStop(0.45,toRgb(ambient));
 		grd.addColorStop(0.5,toRgb(fog));
-		grd.addColorStop(0.2,toRgb(fog));
-		grd.addColorStop(0.1-evFact, toRgb([ambient[0]*color[0], ambient[1]*color[1], ambient[2]*color[2]]));
 		this.ctx.fillStyle=grd;
 		this.ctx.fillRect(0, 0, this.width, this.height);
 		this.tx.setNeedsUpdate();
