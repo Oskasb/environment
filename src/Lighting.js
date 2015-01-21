@@ -68,7 +68,7 @@ define([
 	Lighting.prototype.setSunlightDirection = function(dir) {
 		this.tempVec.set(-dir[2], -dir[1], -dir[0]);
 		//    lightEntity.transformComponent.transform.translation.set(dir);
-		this.lightEntity.transformComponent.transform.rotation.lookAt(this.tempVec, Vector3.UNIT_Y);
+		this.lightEntity.transformComponent.transform.lookAt(this.tempVec, Vector3.UNIT_Y);
 		this.lightEntity.transformComponent.setUpdated();
 	};
 
