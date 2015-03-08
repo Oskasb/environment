@@ -14,6 +14,7 @@ define([
 		) {
 
 		var Sky = function(goo) {
+			this.timeScale = 1;
 			this.lighting = new Lighting(goo);
 			this.lighting.setupMainLight();
 			this.environment = new DynamicEnvironment(this.lighting);
@@ -37,7 +38,7 @@ define([
 
 		Sky.prototype.updateEnvironmentTime = function(tpf, camEntity) {
 			var source = camEntity.transformComponent.worldTransform;
-			this.environment.advanceTime(tpf*0.1);
+			this.environment.advanceTime(tpf * this.timeScale);
 			var envState = this.environment.getEnvironmentState();
 			this.skySphere.setColor(envState.fogColor, envState.ambientLight, envState.skyColor, source.translation.data[1]);
 			this.skySphere.setSunColor(envState.sunLight);
@@ -58,6 +59,14 @@ define([
 			target.translation.setv(source.translation);
 			target.update();
 
+		};
+
+		Sky.prototype.setTimeScale = function(timeScale) {
+			this.timeScale = timeScale;
+		};
+
+		Sky.prototype.setTimeOfDay = function(timeOfDay) {
+			this.environment.applyTimeOfDayUpdate(timeOfDay);
 		};
 
 		Sky.prototype.updateCameraFrame = function(tpf, camEntity) {

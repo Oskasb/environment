@@ -198,7 +198,7 @@ DynamicEnvironment.prototype.setFogGlobals = function(near, far) {
 };
 
 DynamicEnvironment.prototype.setDayStepDuration = function(duration) {
-	this.stepDuration = duration / this.environments.length;
+	this.stepDuration = (duration / this.environments.length) / this.timeScale;
 };
 
 

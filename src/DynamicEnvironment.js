@@ -20,7 +20,6 @@ define([
 		this.lighting = lighting;
 	    this.waterSettings = EnvironmentData.waterSettings;
 
-
 	    this.stepDuration;
 	    this.stepProgress;
 	    this.cycleIndex;
@@ -191,13 +190,17 @@ define([
 	};
 
 
+	DynamicEnvironment.prototype.applyTimeOfDayUpdate = function(timeOfDay) {
+		this.cycleIndex = Math.floor((timeOfDay * (this.environments.length-1)))
+	};
+
     DynamicEnvironment.prototype.advanceTime = function(time) {
 	    if (this.paused) return;
 	    this.lastUpdate -= time;
 	    this.stepProgress += time;
 
 	//    document.getElementById("time_hint").innerHTML = "Cycle: "+this.environments[cycleIndex].name+" ("+cycleIndex+"/"+(this.environments.length-1)+") Progress:"+Math.round(stepProgress);
-	    this.stepFraction = time / this.stepDuration;
+	    this.stepFraction = (time / this.stepDuration);
         if (this.stepProgress >= this.stepDuration) this.stepCycle();
 
     //    var nextIndex = cycleIndex+1;

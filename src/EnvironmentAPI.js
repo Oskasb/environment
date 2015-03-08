@@ -12,6 +12,15 @@ define([
 
 	};
 
+
+	EnvironmentAPI.prototype.setEnvironmentTimeOfDay = function(timeOfDay) {
+		this.sky.setTimeOfDay(timeOfDay)
+	};
+
+	EnvironmentAPI.prototype.setEnvironmentTimeScale = function(timeScale) {
+		this.sky.setTimeScale(timeScale)
+	};
+
 	EnvironmentAPI.prototype.setupEnvironment = function(goo) {
 		this.sky = new Sky(goo);
 		this.sky.attachWaterSystem(goo, waterColorTexturePath);
