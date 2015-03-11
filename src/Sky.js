@@ -56,7 +56,7 @@ define([
 		Sky.prototype.repositionSkySphere = function(camEntity) {
 			var source = camEntity.transformComponent.worldTransform;
 			var target = this.skySphere.skyEntity.transformComponent.worldTransform;
-			target.translation.setv(source.translation);
+			target.translation.setVector(source.translation);
 			target.update();
 
 		};

@@ -66,7 +66,7 @@ Sky.prototype.updateSun = function(camEntity, envState) {
 Sky.prototype.repositionSkySphere = function(camEntity) {
 	var source = camEntity.transformComponent.worldTransform;
 	var target = this.skySphere.skyEntity.transformComponent.worldTransform;
-	target.translation.setv(source.translation);
+	target.translation.setVector(source.translation);
 	target.update();
 
 };
@@ -468,7 +468,7 @@ Lighting.prototype.setBaseFogNearFar = function(fogNear, fogFar) {
 };
 
 Lighting.prototype.setSunlightColor = function(color) {
-	this.dirLight.color.setd(color[0]*(1+Math.random()*0.003)*this.sunBoost, color[1]*(1+Math.random()*0.002)*this.sunBoost, color[2]*(1+Math.random()*0.005)*this.sunBoost, 1.0);
+	this.dirLight.color.setDirect(color[0]*(1+Math.random()*0.003)*this.sunBoost, color[1]*(1+Math.random()*0.002)*this.sunBoost, color[2]*(1+Math.random()*0.005)*this.sunBoost, 1.0);
 };
 
 Lighting.prototype.setAmbientColor = function(color) {
@@ -500,7 +500,7 @@ Lighting.prototype.setupMainLight = function() {
 
 	this.lightEntity = this.goo.world.createEntity('Light1');
 	this.dirLight = new DirectionalLight();
-	this.dirLight.color.setd(1, 0.95, 0.85, 1.0);
+	this.dirLight.color.setDirect(1, 0.95, 0.85, 1.0);
 	this.dirLight.specularIntensity = 1;
 	this.dirLight.intensity = 1;
 
@@ -515,7 +515,7 @@ Lighting.prototype.setupMainLight = function() {
 	console.log("lightComp ---- ",this.lightComp);
 	this.lightEntity.setComponent(this.lightComp);
 
-	this.lightEntity.transformComponent.transform.translation.setd(0, 0, 0);
+	this.lightEntity.transformComponent.transform.translation.setDirect(0, 0, 0);
 	this.lightEntity.transformComponent.transform.lookAt(new Vector3(-0.5,-0.4, 0.43), Vector3.UNIT_Y);
 	this.lightEntity.addToWorld();
 
