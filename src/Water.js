@@ -76,12 +76,12 @@ define([
 			waterRenderer.waterMaterial.shader.uniforms.sunShininess = 50;
 			waterRenderer.waterMaterial.shader.uniforms.sunSpecPower = 0.7;
 			waterRenderer.waterMaterial.shader.uniforms.fogStart = 10000;
-			waterRenderer.waterMaterial.shader.uniforms.waterScale = 8;
-			waterRenderer.waterMaterial.shader.uniforms.distortionMultiplier = 0.04;
+			waterRenderer.waterMaterial.shader.uniforms.waterScale = 4;
+			waterRenderer.waterMaterial.shader.uniforms.distortionMultiplier = 0.34;
 			waterRenderer.waterMaterial.shader.uniforms.fogScale = 50000;
-			waterRenderer.waterMaterial.shader.uniforms.fresnelPow = 1.3;
-			waterRenderer.waterMaterial.shader.uniforms.normalMultiplier = 5;
-			waterRenderer.waterMaterial.shader.uniforms.fresnelMultiplier = 0.3;
+			waterRenderer.waterMaterial.shader.uniforms.fresnelPow = 0.05;
+			waterRenderer.waterMaterial.shader.uniforms.normalMultiplier = 0.75;
+			waterRenderer.waterMaterial.shader.uniforms.fresnelMultiplier = 0.03;
 
 			return waterRenderer;
 		};
