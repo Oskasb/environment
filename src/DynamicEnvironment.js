@@ -86,6 +86,28 @@ define([
 		this.setDayStepDuration(this.globals.baseCycleDuration);
 	};
 
+	var rippleEffect = {
+		"count":1,
+		"opacity":[0.15, 0.7],
+		"alpha":"quickFadeOut",
+		"growthFactor":[8, 15],
+		"growth":"AttackIn",
+		"stretch":2,
+		"strength":0,
+		"spread":0,
+		"acceleration":1,
+		"gravity":0,
+		"rotation":[0,7],
+		"spin":"oneToZero",
+		"size":[0.5,2.3],
+		"lifespan":[0.1, 2.4],
+		"spinspeed":[-0.1, 0.1],
+		"sprite":"smokey",
+		"loopcount":1,
+		"trailsprite":"projectile_1",
+		"trailwidth":1
+	};
+
 	DynamicEnvironment.prototype.playWaterEffect = function(pos, vel, effectData) {
 		var brt = Math.random()*0.16;
 		effectData.color0 = [
@@ -97,7 +119,29 @@ define([
 		effectData.color1 = effectData.color0;
 		effectData.opacity = [0.8, 0.4];
 
+		this.tempVec.setDirect(0, 0, 0)
 		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
+
+		if (Math.random() < 0.5) {
+
+
+		rippleEffect.color0 = effectData.color0;
+		rippleEffect.color1 = effectData.color1;
+		rippleEffect.lifespan[0] = effectData.lifespan[0] + 2;
+		rippleEffect.lifespan[1] = effectData.lifespan[1] + 4;
+		if (Math.random() < 0.2) {
+			rippleEffect.lifespan[0] *= 10;
+			rippleEffect.lifespan[1] *= 20;
+			rippleEffect.opacity[0] = 0.1;
+			rippleEffect.opacity[1] = 0.4;
+			rippleEffect.growth =  "AttackIn";
+		} else {
+			rippleEffect.growth =  "oneToZero";
+		}
+		pos.y = 1;
+
+		SystemBus.emit('playParticles', {simulatorId:"SurfaceParticle", pos:pos, vel:this.tempVec, effectData:rippleEffect});
+		}
 	};
 
 	DynamicEnvironment.prototype.playCloudEffect = function(pos, vel, effectData) {
@@ -105,11 +149,11 @@ define([
 		effectData.color0 = [
 			this.envState.skyColor.data[0]*0.5+this.envState.sunLight.data[0]*0.6 + Math.random()*0.1,
 			this.envState.skyColor.data[1]*0.5+this.envState.sunLight.data[1]*0.6 + Math.random()*0.1,
-			this.envState.skyColor.data[2]*0.5+this.envState.sunLight.data[2]*0.6 + Math.random()*0.1
+			this.envState.skyColor.data[2]*0.5+this.envState.sunLight.data[2]*0.5 + Math.random()*0.4
 		];
 
 		effectData.color1 = effectData.color0;
-		effectData.opacity = [0.1, 0.2];
+		effectData.opacity = [0.1, 0.3];
 
 		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
@@ -124,6 +168,7 @@ define([
 
 		effectData.color1 = effectData.color0;
 		effectData.opacity = [0.1, 0.4];
+
 		SystemBus.emit('playParticles', {simulatorId:"StandardParticle", pos:pos, vel:vel, effectData:effectData});
 	};
 
