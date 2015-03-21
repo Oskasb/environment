@@ -22,7 +22,7 @@ define([
 
 		var Water = function(goo, skySphere, resourcePath) {
 			this.folderUrl = resourcePath;
-			var meshData = Surface.createTessellatedFlat(291500, 291500, 40, 40);
+			var meshData = Surface.createTessellatedFlat(129000, 129000, 40, 40);
 
 			var material = new Material('water_material', ShaderLib.simple);
 			this.waterEntity = goo.world.createEntity(meshData, material);
@@ -38,7 +38,10 @@ define([
 
 		};
 
-
+		Water.prototype.setWaterPosition = function(posVec3) {
+			this.waterEntity.transformComponent.transform.translation.setDirect(posVec3.x, 0, posVec3.z);
+			this.waterEntity.transformComponent.setUpdated();
+		};
 
 		Water.prototype.setBaseFogNearFat = function(near, far) {
 			this.baseFogNear = near;
@@ -57,6 +60,10 @@ define([
             this.waterRenderer.waterMaterial.shader.uniforms.fogColor[2] = fogColor[2];
             this.waterRenderer.waterMaterial.shader.uniforms.fogStart = this.baseFogNear * fogDistance[0];
             this.waterRenderer.waterMaterial.shader.uniforms.fogScale = this.baseFogFar * fogDistance[1];
+
+
+			this.setWaterPosition(this.waterRenderer.waterCamera.translation)
+
         };
 
 
@@ -72,16 +79,16 @@ define([
 			waterRenderer.waterMaterial.shader.uniforms.fogColor = [0.5, 0.7, 1];
 			waterRenderer.waterMaterial.shader.uniforms.sunDirection = [-0.5,-0.1, 0.23];
 			waterRenderer.waterMaterial.shader.uniforms.sunColor = [1, 0.7, 0.2];
-			waterRenderer.waterMaterial.shader.uniforms.waterColor = [0, 0, 0.03];
+			waterRenderer.waterMaterial.shader.uniforms.waterColor = [0.01, 0.01, 0.02];
 			waterRenderer.waterMaterial.shader.uniforms.sunShininess = 50;
 			waterRenderer.waterMaterial.shader.uniforms.sunSpecPower = 0.7;
 			waterRenderer.waterMaterial.shader.uniforms.fogStart = 10000;
 			waterRenderer.waterMaterial.shader.uniforms.waterScale = 4;
 			waterRenderer.waterMaterial.shader.uniforms.distortionMultiplier = 0.34;
 			waterRenderer.waterMaterial.shader.uniforms.fogScale = 50000;
-			waterRenderer.waterMaterial.shader.uniforms.fresnelPow = 0.05;
+			waterRenderer.waterMaterial.shader.uniforms.fresnelPow = 4.95;
 			waterRenderer.waterMaterial.shader.uniforms.normalMultiplier = 0.75;
-			waterRenderer.waterMaterial.shader.uniforms.fresnelMultiplier = 0.03;
+			waterRenderer.waterMaterial.shader.uniforms.fresnelMultiplier = 1.03;
 
 			return waterRenderer;
 		};
